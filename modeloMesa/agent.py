@@ -44,7 +44,7 @@ class Car(Agent):
             self.posibleMovements = [((x+1,y), "Left"),((x,y-1), "Up"),((x-1,y), "Right")]
             y -= 1
         elif direction == "Left":
-            self.posibleMovements = [((x,y-1), "Right"),((x-1,y), "Right"),((x,y+1), "Down")]
+            self.posibleMovements = [((x,y-1), "Up"),((x-1,y), "Right"),((x,y+1), "Down")]
             x -= 1
         elif direction == "Right":
             self.posibleMovements = [((x,y+1), "Down"),((x+1,y), "Left"),((x,y-1), "Up")]
@@ -61,6 +61,7 @@ class Car(Agent):
 
     def moveIntelligent(self):
         new_position = self.pos
+
         distancia_minima = 1000
         for pos in self.posibleMovements:
             if pos[0][0] < self.model.width and pos[0][1] < self.model.height:
@@ -73,10 +74,13 @@ class Car(Agent):
                         new_position = self.posibleMovements[2][0]
                     elif (self.pos == (7,11) or self.pos == (7,12)) and self.destino == (5,15):
                         new_position = self.posibleMovements[2][0]
-                    elif self.pos == (13,23) and (self.destino[0] > 2 and self.destino[1] > 12 and self.destino[1] < 20):
+                    elif self.pos == (13,23) and (self.destino[0] > 2 and self.destino[1] > 12 and self.destino[1] < 21):
                         new_position = self.posibleMovements[0][0]
+                    elif (self.destino[0] > 16 and self.destino[1] < 10) and (self.pos == (13,9) or self.pos == (13,8)):
+                        new_position = self.posibleMovements[2][0]
                     elif (isinstance(cell, Road) and ((cell.direction != self.direction and cell.direction != pos[1]) 
                     or cell.direction == self.direction)) or isinstance(cell, Destination) and pos[0] == self.destino:
+
                         distancia_nueva = self.calcularDistancia(self.destino, pos[0])
                         if distancia_nueva < distancia_minima:
                             distancia_minima = distancia_nueva
@@ -87,7 +91,7 @@ class Car(Agent):
             else:
                 new_position = self.posibleMovements[1][0]
         print(f"Automovim Numero {self.unique_id}")
-        print(new_position)
+        print(self.pos)
         print(self.destino)
         return new_position
 
@@ -112,7 +116,9 @@ class Car(Agent):
                 contentCellInFront = self.model.grid.get_cell_list_contents([new_position])
 
                 for cellFront in contentCellInFront:
-                    if isinstance(cellFront, Traffic_Light):
+                    if (self.pos == (7,15) or self.pos == (6,15)) and self.destino == (5,15):
+                        new_position = (self.pos[0]-1, self.pos[1])
+                    elif isinstance(cellFront, Traffic_Light):
                         if cellFront.state == False:
                             new_position = self.pos
                     elif isinstance(cellFront, Car):

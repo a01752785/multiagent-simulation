@@ -15,6 +15,8 @@ class RandomModel(Model):
 
         dataDictionary = json.load(open("mapDictionary.json"))
         self.destinos = []
+        self.num_agents = N
+        self.running = True
 
         self.traffic_lights = []
 
@@ -48,14 +50,12 @@ class RandomModel(Model):
                         self.grid.place_agent(agent, (c, self.height - r - 1))
             
             item = 1000
-            while item < 1020:
+            while item < 1000 + self.num_agents:
                 agent = Car(item, choice(self.destinos), self)
                 self.grid.place_agent(agent, choice(self.destinos))
                 self.schedule.add(agent)
                 item += 1
 
-        self.num_agents = N
-        self.running = True
 
     def step(self):
         '''Advance the model by one step.'''
