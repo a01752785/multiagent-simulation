@@ -39,16 +39,16 @@ class Car(Agent):
     def moveToDirection(self, direction):
         x, y = self.pos
         if direction == "Up":
-            self.posibleMovements = [((x-1,y), "Left"),((x,y+1), "Up"),((x+1,y), "Right")]
+            self.posibleMovements = [((x-1,y), "Right"),((x,y+1), "Down"),((x+1,y), "Left")]
             y += 1
         elif direction == "Down":
-            self.posibleMovements = [((x+1,y), "Right"),((x,y-1), "Down"),((x-1,y), "Left")]
+            self.posibleMovements = [((x+1,y), "Left"),((x,y-1), "Up"),((x-1,y), "Right")]
             y -= 1
         elif direction == "Left":
-            self.posibleMovements = [((x,y-1), "Down"),((x-1,y), "Left"),((x,y+1), "Right")]
+            self.posibleMovements = [((x,y-1), "Right"),((x-1,y), "Right"),((x,y+1), "Down")]
             x -= 1
         elif direction == "Right":
-            self.posibleMovements = [((x,y+1), "Up"),((x+1,y), "Right"),((x,y-1), "Down")]
+            self.posibleMovements = [((x,y+1), "Down"),((x+1,y), "Left"),((x,y-1), "Up")]
             x += 1
         return(x, y)
 
@@ -68,13 +68,13 @@ class Car(Agent):
                 content = self.model.grid.get_cell_list_contents([pos[0]])
                 # (isinstance(cell, Road) and ((cell.direction != self.direction and cell.direction == pos[1]) or cell.direction == self.direction))
                 for cell in content:
-
-                    if (isinstance(cell, Road) and ((cell.direction != self.direction and cell.direction == pos[1]) or cell.direction == self.direction)) or isinstance(cell, Destination) and pos[0] == self.destino:
+                    if (isinstance(cell, Road) and ((cell.direction != self.direction and cell.direction != pos[1]) 
+                    or cell.direction == self.direction)) or isinstance(cell, Destination) and pos[0] == self.destino:
                         distancia_nueva = self.calcularDistancia(self.destino, pos[0])
                         if distancia_nueva < distancia_minima:
                             distancia_minima = distancia_nueva
                             new_position =  pos[0]
-                        elif distancia_nueva == distancia_minima:
+                        elif distancia_nueva == distancia_minima and (self.pos != (1,10) or self.pos != (1,9)):
                             new_position = self.posibleMovements[1][0]
 
             else:
