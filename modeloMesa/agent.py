@@ -59,37 +59,42 @@ class Car(Agent):
         ax, ay = posAMover
         return (abs(ax - nx) + abs(ay - ny))
 
+    def intercerciones(self):
+        if (self.pos == (1,9) or self.pos == (1,8)) and self.destino[0] > 1 and self.destino[1] < 10:
+            new_position = self.posibleMovements[0][0]
+        elif (self.pos == (17,11) or self.pos == (17,12)) and self.destino != (5,15) and (self.destino[0] < 14 and self.destino[1] > 12):
+            new_position = self.posibleMovements[2][0]
+        elif (self.pos == (7,11) or self.pos == (7,12)) and self.destino == (5,15):
+            new_position = self.posibleMovements[2][0]
+        elif self.pos == (13,23) and (self.destino[0] > 2 and self.destino[1] > 12 and self.destino[1] < 21):
+            new_position = self.posibleMovements[0][0]
+        elif (self.destino[0] > 16 and self.destino[1] < 10) and (self.pos == (13,9) or self.pos == (13,8)):
+            new_position = self.posibleMovements[2][0]
+        else:
+            new_position = self.pos
+        return new_position
+
     def moveIntelligent(self):
-        new_position = self.pos
+        new_position = self.intercerciones()
+        
+        if new_position == self.pos:
+            distancia_minima = 1000
+            for pos in self.posibleMovements:
+                if pos[0][0] < self.model.width and pos[0][1] < self.model.height:
+                    content = self.model.grid.get_cell_list_contents([pos[0]])
+                    for cell in content:
 
-        distancia_minima = 1000
-        for pos in self.posibleMovements:
-            if pos[0][0] < self.model.width and pos[0][1] < self.model.height:
-                content = self.model.grid.get_cell_list_contents([pos[0]])
-                # (isinstance(cell, Road) and ((cell.direction != self.direction and cell.direction == pos[1]) or cell.direction == self.direction))
-                for cell in content:
-                    if (self.pos == (1,9) or self.pos == (1,8)) and self.destino[0] > 1 and self.destino[1] < 10:
-                        new_position = self.posibleMovements[0][0]
-                    elif (self.pos == (17,11) or self.pos == (17,12)) and self.destino != (5,15) and (self.destino[0] < 14 and self.destino[1] > 12):
-                        new_position = self.posibleMovements[2][0]
-                    elif (self.pos == (7,11) or self.pos == (7,12)) and self.destino == (5,15):
-                        new_position = self.posibleMovements[2][0]
-                    elif self.pos == (13,23) and (self.destino[0] > 2 and self.destino[1] > 12 and self.destino[1] < 21):
-                        new_position = self.posibleMovements[0][0]
-                    elif (self.destino[0] > 16 and self.destino[1] < 10) and (self.pos == (13,9) or self.pos == (13,8)):
-                        new_position = self.posibleMovements[2][0]
-                    elif (isinstance(cell, Road) and ((cell.direction != self.direction and cell.direction != pos[1]) 
-                    or cell.direction == self.direction)) or isinstance(cell, Destination) and pos[0] == self.destino:
+                        if (isinstance(cell, Road) and ((cell.direction != self.direction and cell.direction != pos[1]) 
+                        or cell.direction == self.direction)) or isinstance(cell, Destination) and pos[0] == self.destino:
+                            distancia_nueva = self.calcularDistancia(self.destino, pos[0])
+                            if distancia_nueva < distancia_minima:
+                                distancia_minima = distancia_nueva
+                                new_position =  pos[0]
+                            elif distancia_nueva == distancia_minima:
+                                new_position = self.posibleMovements[1][0]
 
-                        distancia_nueva = self.calcularDistancia(self.destino, pos[0])
-                        if distancia_nueva < distancia_minima:
-                            distancia_minima = distancia_nueva
-                            new_position =  pos[0]
-                        elif distancia_nueva == distancia_minima:
-                            new_position = self.posibleMovements[1][0]
-
-            else:
-                new_position = self.posibleMovements[1][0]
+                else:
+                    new_position = self.posibleMovements[1][0]
         print(f"Automovim Numero {self.unique_id}")
         print(self.pos)
         print(self.destino)
