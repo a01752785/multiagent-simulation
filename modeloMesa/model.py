@@ -46,10 +46,13 @@ class RandomModel(Model):
                         agent = Destination(f"d_{r*self.width+c}", self)
                         self.destinos.append((c, self.height - r - 1))
                         self.grid.place_agent(agent, (c, self.height - r - 1))
-
-            agent = Car(10000, choice(self.destinos), self)
-            self.grid.place_agent(agent, choice(self.destinos))
-            self.schedule.add(agent)
+            
+            item = 1000
+            while item < 1020:
+                agent = Car(item, choice(self.destinos), self)
+                self.grid.place_agent(agent, choice(self.destinos))
+                self.schedule.add(agent)
+                item += 1
 
         self.num_agents = N
         self.running = True
