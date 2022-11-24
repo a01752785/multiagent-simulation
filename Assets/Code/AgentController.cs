@@ -12,6 +12,8 @@ using UnityEngine.Networking;
 [Serializable]
 public class AgentData
 {
+    //Clase principal de los agentes, la cual guarda el id y la posicion de los agentes
+    //creados en el modelo
     public string id;
     public float x, y, z;
 
@@ -22,6 +24,51 @@ public class AgentData
         this.y = y;
         this.z = z;
     }
+}
+[Serializable]
+public class CarData : AgentData
+{
+    //Clase del Agente Coche, que hereda de la clase principal y crea el booleano que indica
+    //si el robot tiene una caja en sus manos
+    public bool isInDestiny;
+
+    public CarData(string id, float x, float y, float z, bool isInDestiny) : base(id, x, y, z)
+    {
+        this.isInDestiny = isInDestiny;
+    }
+}
+
+[Serializable]
+public class SemaforoData : AgentData
+{
+    //Clase del Agente caja, que hereda de la clase principal y crea el booleano que indica
+    //si la caja ya fue recogida o no
+    public bool state;
+
+    public SemaforoData(string id, float x, float y, float z, bool state) : base(id, x, y, z)
+    {
+        this.state = state;
+    }
+}
+
+[Serializable]
+
+public class CarsData
+{
+    //Clase que permite guardar las posiciones de los agentes Coche, asi como tambien actualizarlas
+    public List<CarData> positions;
+
+    public CarsData() => this.positions = new List<CarData>();
+}
+
+[Serializable]
+
+public class SemaforosData
+{
+    //Clase que permite guardar las posiciones de los agentes Caja, asi como tambien actualizarlas
+    public List<SemaforoData> positions;
+
+    public SemaforosData() => this.positions = new List<SemaforoData>();
 }
 
 [Serializable]
@@ -41,26 +88,30 @@ public class AgentController : MonoBehaviour
     string getObstaclesEndpoint = "/getObstacles";
     string sendConfigEndpoint = "/init";
     string updateEndpoint = "/update";
-    AgentsData agentsData, obstacleData;
-    Dictionary<string, GameObject> agents;
+    AgentsData agentsData;
+    CarsData carsData;
+    SemaforosData semaforosData;
+    Dictionary<string, GameObject> semaforosRojo, semaforosVerde;
     Dictionary<string, Vector3> prevPositions, currPositions;
 
     bool updated = false, started = false;
 
-    public GameObject agentPrefab, obstaclePrefab, floor;
-    public int NAgents, width, height;
+    public GameObject coche1Prefab, coche2Prefab, semaforoVerdePrefab, semaforoRojoPrefab;
+    public int NCoches;
     public float timeToUpdate = 5.0f;
     private float timer, dt;
 
     void Start()
     {
         agentsData = new AgentsData();
-        obstacleData = new AgentsData();
+        carsData = new CarsData();
+        semaforosData = new SemaforosData();
 
         prevPositions = new Dictionary<string, Vector3>();
         currPositions = new Dictionary<string, Vector3>();
 
-        agents = new Dictionary<string, GameObject>();
+        semaforosVerde = new Dictionary<string, GameObject>();
+        semaforosRojo = new Dictionary<string, GameObject>();
 
         floor.transform.localScale = new Vector3((float)width/10, 1, (float)height/10);
         floor.transform.localPosition = new Vector3((float)width/2-0.5f, 0, (float)height/2-0.5f);
