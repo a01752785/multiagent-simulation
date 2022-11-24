@@ -35,8 +35,8 @@ class Car(Agent):
                 if isinstance(element, Road):
                     return(movement)
 
-    def moveToDirection(self, direction):
-        x, y = self.pos
+    def moveToDirection(self, direction, fromPositon):
+        x, y = fromPositon
         if direction == "Up":
             self.posibleMovements = [((x-1,y), "Right"),((x,y+1), "Down"),((x+1,y), "Left")]
             y += 1
@@ -50,6 +50,26 @@ class Car(Agent):
             self.posibleMovements = [((x,y+1), "Down"),((x+1,y), "Left"),((x,y-1), "Up")]
             x += 1
         return(x, y)
+
+    def dosyTresEnfrente(self, direction):
+        x, y = self.pos
+        if direction == "Up":
+            dos = (x,y+2)
+            tres = (x,y+3)
+        elif direction == "Down":
+            dos = (x,y-2)
+            tres = (x,y-3)
+        elif direction == "Left":
+            dos = (x-2,y)
+            tres = (x-3,y)
+        elif direction == "Right":
+            dos = (x+2,y)
+            tres = (x+3,y)
+
+        if dos[0] >= 0 and dos[0] < self.model.width and dos[1] > 0 and dos[1] < self.model.height:
+            return (dos, tres)
+        else:
+            return False
 
     def calcularDistancia(self, posDestino, posAMover):
         """
@@ -100,6 +120,69 @@ class Car(Agent):
         print(self.destino)
         return new_position
 
+    def giroValido(self, pos_move):
+        if pos_move[0] >= 0 and pos_move[0] < self.model.width and pos_move[1] > 0 and pos_move[1] < self.model.height:
+            contentCell = self.model.grid.get_cell_list_contents([pos_move])
+            for item in contentCell:
+                if isinstance(item, Car):
+                    return False
+            for item in contentCell:
+                if isinstance(item, Road):
+                    return True
+            else:
+                return False
+        else: 
+            return False
+
+    def checkTrafic(self, normal_movement):
+        unoEnfrente = self.posibleMovements[1][0]
+        mePuedoMover = self.dosyTresEnfrente(self.direction)
+
+        if mePuedoMover == False:
+            return normal_movement
+
+        dosEnfrente = self.dosyTresEnfrente(self.direction)[0]
+
+        # tresEnfrente = self.dosyTresEnfrente(self.direction)[1]
+        numeroCarros = 0
+        contentCell = self.model.grid.get_cell_list_contents([unoEnfrente])
+        for item in contentCell:
+            if isinstance(item, Car):
+                numeroCarros += 1
+                break
+        contentCell = self.model.grid.get_cell_list_contents([dosEnfrente])
+        for item in contentCell:
+            if isinstance(item, Car):
+                numeroCarros += 1
+                break
+        # contentCell = self.model.grid.get_cell_list_contents([tresEnfrente])
+        # for item in contentCell:
+        #     if isinstance(item, Car):
+        #         numeroCarros += 1
+        #         break
+
+        izquierda = self.posibleMovements[0][0]
+        derecha = self.posibleMovements[2][0]
+
+        if numeroCarros != 2:
+            return normal_movement
+        else:
+            if self.giroValido(derecha):
+                self.moveToDirection(self.direction, derecha)
+                if self.giroValido(self.posibleMovements[1][0]):
+                    return self.posibleMovements[1][0]
+                else:
+                    return normal_movement
+            elif self.giroValido(izquierda):
+                self.moveToDirection(self.direction, izquierda)
+                if self.giroValido(self.posibleMovements[1][0]):
+                    return self.posibleMovements[1][0]
+                else:
+                    return normal_movement
+            else:
+                return normal_movement
+
+
     def move(self):
         """ 
         Determines if the agent can move in the direction that was chosen
@@ -108,6 +191,7 @@ class Car(Agent):
             new_position = self.pos
             self.isInDestiny = True
 
+        new_position = self.pos
         currentCell = self.model.grid.get_cell_list_contents([self.pos])
         for cell in currentCell:
             if isinstance(cell, Destination) and (self.pos != self.destino):
@@ -115,11 +199,10 @@ class Car(Agent):
 
             elif isinstance(cell, Road):
                 self.direction = cell.direction
-                new_position = self.moveToDirection(self.direction)
+                new_position = self.moveToDirection(self.direction, self.pos)
 
-                # posCellInFront = self.moveToDirection(self.direction)
+                # mover según lo que haya en frente
                 contentCellInFront = self.model.grid.get_cell_list_contents([new_position])
-
                 for cellFront in contentCellInFront:
                     if (self.pos == (7,15) or self.pos == (6,15)) and self.destino == (5,15):
                         new_position = (self.pos[0]-1, self.pos[1])
@@ -130,9 +213,15 @@ class Car(Agent):
                         new_position = self.pos
                     elif isinstance(cellFront, Road):
                         new_position = self.moveIntelligent()
+                
+                new_position = self.checkTrafic(new_position)
 
             elif isinstance(cell, Traffic_Light):
-                new_position = self.moveToDirection(self.direction)
+                new_position = self.moveToDirection(self.direction, self.pos)
+        
+        # mover en trafico
+        # ve si hay tres carros enfrente de el
+        # Si si hay, se mueve a la izquierda o derecha (dependiendo de a cual pueda) y luego se mueve enfrente
         
         contentNewCell = self.model.grid.get_cell_list_contents([new_position])
         for item in contentNewCell:
