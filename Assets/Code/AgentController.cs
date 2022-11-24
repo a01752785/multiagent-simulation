@@ -91,10 +91,10 @@ public class AgentController : MonoBehaviour
     AgentsData agentsData;
     CarsData carsData;
     SemaforosData semaforosData;
-    Dictionary<string, GameObject> semaforosRojo, semaforosVerde;
+    Dictionary<string, GameObject> agents, semaforosVerde;
     Dictionary<string, Vector3> prevPositions, currPositions;
 
-    bool updated = false, started = false;
+    bool updated = false, started = false, startedLight= false;
 
     public GameObject coche1Prefab, coche2Prefab, semaforoVerdePrefab, semaforoRojoPrefab;
     public int NCoches;
@@ -111,10 +111,10 @@ public class AgentController : MonoBehaviour
         currPositions = new Dictionary<string, Vector3>();
 
         semaforosVerde = new Dictionary<string, GameObject>();
-        semaforosRojo = new Dictionary<string, GameObject>();
+        agents = new Dictionary<string, GameObject>();
 
-        floor.transform.localScale = new Vector3((float)width/10, 1, (float)height/10);
-        floor.transform.localPosition = new Vector3((float)width/2-0.5f, 0, (float)height/2-0.5f);
+        // floor.transform.localScale = new Vector3((float)width/10, 1, (float)height/10);
+        // floor.transform.localPosition = new Vector3((float)width/2-0.5f, 0, (float)height/2-0.5f);
         
         timer = timeToUpdate;
 
@@ -143,8 +143,10 @@ public class AgentController : MonoBehaviour
                 Vector3 interpolated = Vector3.Lerp(previousPosition, currentPosition, dt);
                 Vector3 direction = currentPosition - interpolated;
 
-                agents[agent.Key].transform.localPosition = interpolated;
-                if(direction != Vector3.zero) agents[agent.Key].transform.rotation = Quaternion.LookRotation(direction);
+                 if(semaforosVerde[agent.Key].activeInHierarchy) {
+                    semaforosVerde[agent.Key].transform.localPosition = interpolated;
+                    if(direction != Vector3.zero) semaforosVerde[agent.Key].transform.rotation = Quaternion.LookRotation(direction);
+                }
             }
 
             // float t = (timer / timeToUpdate);
@@ -161,7 +163,8 @@ public class AgentController : MonoBehaviour
             Debug.Log(www.error);
         else 
         {
-            StartCoroutine(GetAgentsData());
+            StartCoroutine(GetCarsData());
+            StartCoroutine(GetSemaforosData());
         }
     }
 
@@ -169,9 +172,7 @@ public class AgentController : MonoBehaviour
     {
         WWWForm form = new WWWForm();
 
-        form.AddField("NAgents", NAgents.ToString());
-        form.AddField("width", width.ToString());
-        form.AddField("height", height.ToString());
+        form.AddField("N", NCoches.ToString());
 
         UnityWebRequest www = UnityWebRequest.Post(serverUrl + sendConfigEndpoint, form);
         www.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -186,37 +187,43 @@ public class AgentController : MonoBehaviour
         {
             Debug.Log("Configuration upload complete!");
             Debug.Log("Getting Agents positions");
-            StartCoroutine(GetAgentsData());
-            StartCoroutine(GetObstacleData());
+            StartCoroutine(GetCarsData());
+            StartCoroutine(GetSemaforosData());
         }
     }
 
-    IEnumerator GetAgentsData() 
+    IEnumerator GetCarsData() 
     {
-        UnityWebRequest www = UnityWebRequest.Get(serverUrl + getAgentsEndpoint);
+        UnityWebRequest www = UnityWebRequest.Get(serverUrl + getAgentsEndpoint); //Modificar EndPoint
         yield return www.SendWebRequest();
  
         if (www.result != UnityWebRequest.Result.Success)
             Debug.Log(www.error);
         else 
         {
-            agentsData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
+            carsData = JsonUtility.FromJson<CarsData>(www.downloadHandler.text);
 
-            foreach(AgentData agent in agentsData.positions)
+            foreach(CarData car in carsData.positions)
             {
-                Vector3 newAgentPosition = new Vector3(agent.x, agent.y, agent.z);
+                Vector3 newAgentPosition = new Vector3(car.x, car.y, car.z);
 
                     if(!started)
                     {
-                        prevPositions[agent.id] = newAgentPosition;
-                        agents[agent.id] = Instantiate(agentPrefab, newAgentPosition, Quaternion.identity);
+                        prevPositions[car.id] = newAgentPosition;
+                        Random rnd = new Random();
+                        int num = rnd.Next(1, 3);
+                        if (num == 1) {
+                            agents[car.id] = Instantiate(coche1Prefab, newAgentPosition, Quaternion.identity);
+                        } else {
+                            agents[car.id] = Instantiate(coche2Prefab, newAgentPosition, Quaternion.identity);
+                        }
                     }
                     else
                     {
                         Vector3 currentPosition = new Vector3();
-                        if(currPositions.TryGetValue(agent.id, out currentPosition))
-                            prevPositions[agent.id] = currentPosition;
-                        currPositions[agent.id] = newAgentPosition;
+                        if(currPositions.TryGetValue(car.id, out currentPosition))
+                            prevPositions[car.id] = currentPosition;
+                        currPositions[car.id] = newAgentPosition;
                     }
             }
 
@@ -225,23 +232,34 @@ public class AgentController : MonoBehaviour
         }
     }
 
-    IEnumerator GetObstacleData() 
+    IEnumerator GetSemaforosData() 
     {
-        UnityWebRequest www = UnityWebRequest.Get(serverUrl + getObstaclesEndpoint);
+        UnityWebRequest www = UnityWebRequest.Get(serverUrl + getObstaclesEndpoint); //Modificar EndPoint
         yield return www.SendWebRequest();
  
         if (www.result != UnityWebRequest.Result.Success)
             Debug.Log(www.error);
         else 
         {
-            obstacleData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
+            semaforosData = JsonUtility.FromJson<SemaforosData>(www.downloadHandler.text);
 
-            Debug.Log(obstacleData.positions);
+            Debug.Log(semaforosData.positions);
 
-            foreach(AgentData obstacle in obstacleData.positions)
+            foreach(SemaforoData semaforo in semaforosData.positions)
             {
-                Instantiate(obstaclePrefab, new Vector3(obstacle.x, obstacle.y, obstacle.z), Quaternion.identity);
+                if (!startedLight){
+                    agents[semaforo.id] = Instantiate(semaforoRojoPrefab, new Vector3(semaforo.x, semaforo.y, semaforo.z), Quaternion.identity);
+                    semaforosVerde[semaforo.id] = Instantiate(semaforoVerdePrefab, new Vector3(semaforo.x, semaforo.y, semaforo.z), Quaternion.identity);
+                    semaforosVerde[semaforo.id].SetActive(false);
+                }
+                else{
+                    if (semaforo.state) {
+                        semaforosVerde[semaforo.id].SetActive(true);
+                        agents[semaforo.id].SetActive(false);
+                    }
+                }
             }
+            if (!startedLight) startedLight = true;
         }
     }
 }

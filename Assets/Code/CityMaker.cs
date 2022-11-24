@@ -61,16 +61,16 @@ public class CityMaker : MonoBehaviour
                 position = new Vector3(x * tileSize, 0, y * tileSize);
                 tile = Instantiate(roadPrefab, position, Quaternion.identity);
                 tile.transform.parent = transform;
-                if (semaforosArriba.Contains(tiles[i])) { 
+                if (semaforosArriba.Contains((x, y))) { 
                     tile = Instantiate(semaphorePrefab, position, Quaternion.Euler(0, 90, 0));
                 }
-                else if (semaforosAbajo.Contains(tiles[i])) { 
+                else if (semaforosAbajo.Contains((x, y))) { 
                     tile = Instantiate(semaphorePrefab, position, Quaternion.Euler(0, -90, 0));
                 }
-                else if (semaforosIzquierda.Contains(tiles[i])) { 
+                else if (semaforosIzquierda.Contains((x, y))) { 
                     tile = Instantiate(semaphorePrefab, position, Quaternion.Euler(0, 180, 0));
                 }
-                else if (semaforosDerecha.Contains(tiles[i])) { 
+                else if (semaforosDerecha.Contains((x, y))) { 
                     tile = Instantiate(semaphorePrefab, position, Quaternion.Euler(0, 0, 0));
                 }
                 tile.transform.parent = transform;
@@ -78,13 +78,13 @@ public class CityMaker : MonoBehaviour
             } else if (tiles[i] == 'S') {
                 position = new Vector3(x * tileSize, 0, y * tileSize);
                 
-                if (semaforosArriba.Contains(tiles[(x, y)])) {
+                if (semaforosArriba.Contains((x, y))) {
                     tile = Instantiate(roadPrefab, position, Quaternion.Euler(0, 90, 0));
                     tile.transform.parent = transform; 
                     tile = Instantiate(semaphorePrefab, position, Quaternion.Euler(0, 90, 0));
                     tile.transform.parent = transform;
                 }
-                else if (semaforosAbajo.Contains(tiles[i])) { 
+                else if (semaforosAbajo.Contains((x, y))) { 
                     tile = Instantiate(roadPrefab, position, Quaternion.Euler(0, 90, 0));
                     tile.transform.parent = transform;
                     tile = Instantiate(semaphorePrefab, position, Quaternion.Euler(0, -90, 0));
@@ -96,7 +96,7 @@ public class CityMaker : MonoBehaviour
                     tile = Instantiate(semaphorePrefab, position, Quaternion.Euler(0, 180, 0));
                     tile.transform.parent = transform;
                 }
-                else if (semaforosDerecha.Contains(tiles[i])) {
+                else if (semaforosDerecha.Contains((x, y))) {
                     tile = Instantiate(roadPrefab, position, Quaternion.Euler(0, 90, 0));
                     tile.transform.parent = transform; 
                     tile = Instantiate(semaphorePrefab, position, Quaternion.Euler(0, 0, 0));
@@ -106,7 +106,6 @@ public class CityMaker : MonoBehaviour
             } else if (tiles[i] == 'D') {
                 position = new Vector3(x * tileSize, 0, y * tileSize);
                 tile = Instantiate(buildingPrefab, position, Quaternion.Euler(0, 90, 0));
-                tile.GetComponent<Renderer>().materials[0].color = Color.red;
                 tile.transform.parent = transform;
                 x += 1;
             } else if (tiles[i] == '#') {
