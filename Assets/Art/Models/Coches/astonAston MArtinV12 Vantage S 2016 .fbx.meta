@@ -3,7 +3,172 @@ guid: 7c9da3e4c832d2540bdc61f647d4d87c
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Aluminio 1
+    second: {fileID: 2100000, guid: 07b7369b66f6cf24ab923baab43db3fb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Aluminio_
+    second: {fileID: 2100000, guid: 7f512ad1bd116f04b96a1351c70a0dea, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Back Lights
+    second: {fileID: 2100000, guid: 4c7eab4faf7f0dd41a577788e1658e35, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Black
+    second: {fileID: 2100000, guid: 7186608b3569fbc46900e941a1a26dba, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Black 1
+    second: {fileID: 2100000, guid: 48f5af5296a410144ab341e6f089d82f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Brake
+    second: {fileID: 2100000, guid: 8a2a961b91468aa4f83ba3e5ae7fe478, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Chrome 2
+    second: {fileID: 2100000, guid: 5c03cd51708a7f34e840a110fdbb8435, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Chrome.001
+    second: {fileID: 2100000, guid: 031199e7a8d9a394299eb1b2314dd7e4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Front Glass
+    second: {fileID: 2100000, guid: 7c540ecf997490147a9db46ef62e71b4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glass
+    second: {fileID: 2100000, guid: a02e08d3f9a30564595ef4eef0e70e4a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Light
+    second: {fileID: 2100000, guid: ee5fcf71b170a65439fd1fc65b01a21d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Red Chromeback
+    second: {fileID: 2100000, guid: f5e2a4d0d7d4b694894dde0735448480, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Redlight
+    second: {fileID: 2100000, guid: 1716f08086c313e40b3f6129d8c7d090, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rims
+    second: {fileID: 2100000, guid: 9f741b0b98794c841b8253086f07e72f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rims logo
+    second: {fileID: 2100000, guid: 20e24a404446b1940873e4903f8550cd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Silver
+    second: {fileID: 2100000, guid: 5d8b51878bb7f084bb21ffb1302b3c40, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tires1
+    second: {fileID: 2100000, guid: 49c4d05989a0a7448905308a6eaba5fc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tires2
+    second: {fileID: 2100000, guid: 2021a5aeafbab3a408ab6af38ac8db63, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: astonlogo
+    second: {fileID: 2100000, guid: efc8ec2783ee53f4a92fd1485e8e982e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: backglasssquare
+    second: {fileID: 2100000, guid: 52ca42253ab15b84bb3075e5a42fa7cd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: basecolor
+    second: {fileID: 2100000, guid: 09cd517809cef22409bcb1019760860a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bottom
+    second: {fileID: 2100000, guid: 1856f364d0d84364f877b425ac777b96, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buttonlights
+    second: {fileID: 2100000, guid: 968e129508eaa5343b5d78b6d79310a7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: disque
+    second: {fileID: 2100000, guid: 916fa03287921744e986274e5718acd7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: exhaust
+    second: {fileID: 2100000, guid: 21cf657f08999c5498363dea66d4e906, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: frontglasssquares
+    second: {fileID: 2100000, guid: abad9835c81860143bdbda77b575882a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mylogoboard
+    second: {fileID: 2100000, guid: 919b1ce61088cfc42916c05b88cd2a33, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: redleather
+    second: {fileID: 2100000, guid: eb213fe6b52ac1c4db38bb17a6134d38, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: screen
+    second: {fileID: 2100000, guid: 0a538445f075f934a82f7830be17be2c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: steeringlogo
+    second: {fileID: 2100000, guid: bae0bd227f8e8864fadf4b2af6823ed8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: underglass
+    second: {fileID: 2100000, guid: 6b62f5caf96984845b14ad32893ab698, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: whiteleather
+    second: {fileID: 2100000, guid: 29c25fb0fa6f9184cb0bd2345b989a3e, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: licenceboard
+    second: {fileID: 2800000, guid: 744327e1259cd0047834b2ac270fef96, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
