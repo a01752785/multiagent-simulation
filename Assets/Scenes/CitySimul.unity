@@ -236,6 +236,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 521f9d3738ea9244cbc2325dc9f509d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coche1Prefab: {fileID: 0}
+  coche2Prefab: {fileID: 0}
+  semaforoVerdePrefab: {fileID: 0}
+  semaforoRojoPrefab: {fileID: 0}
+  NCoches: 0
+  timeToUpdate: 5
 --- !u!4 &101338793
 Transform:
   m_ObjectHideFlags: 0
@@ -280,6 +286,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217b5d647ffda1445ab4c23899b0228c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layout: {fileID: 0}
+  roadPrefab: {fileID: 623656369241294920, guid: 2425151c9feb44b4098a55042fcadd2e, type: 3}
+  building1Prefab: {fileID: 4918315371847689363, guid: 8be3ca536fa42b5449c923485982923c, type: 3}
+  building2Prefab: {fileID: 2757889544495523874, guid: e1e8a29125e18574f8e1d442eaeac349, type: 3}
+  destiny1Prefab: {fileID: 7185175791613538913, guid: 3a54a6b006066824486598f320cd0d15, type: 3}
+  destiny2Prefab: {fileID: 3053489098351902642, guid: f068b7fd0e8b4484aa197ccdf997fd81, type: 3}
+  semaphorePrefab: {fileID: 1624262349684808749, guid: ba49e949a53830e4b8fbaff0ec8a187f, type: 3}
+  tileSize: 0
 --- !u!4 &1139532537
 Transform:
   m_ObjectHideFlags: 0
