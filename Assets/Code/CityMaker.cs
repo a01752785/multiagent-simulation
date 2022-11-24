@@ -105,12 +105,12 @@ public class CityMaker : MonoBehaviour
                 x += 1;
             } else if (tiles[i] == 'D') {
                 position = new Vector3(x * tileSize, 0, y * tileSize);
-                tile = Instantiate(buildingPrefab, position, Quaternion.Euler(0, 90, 0));
+                tile = Instantiate(building1Prefab, position, Quaternion.Euler(0, 90, 0));
                 tile.transform.parent = transform;
                 x += 1;
             } else if (tiles[i] == '#') {
                 position = new Vector3(x * tileSize, 0, y * tileSize);
-                tile = Instantiate(buildingPrefab, position, Quaternion.identity);
+                tile = Instantiate(building1Prefab, position, Quaternion.identity);
                 tile.transform.localScale = new Vector3(1, Random.Range(0.5f, 2.0f), 1);
                 tile.transform.parent = transform;
                 x += 1;
