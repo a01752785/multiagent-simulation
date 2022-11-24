@@ -25,6 +25,7 @@ public class AgentData
         this.z = z;
     }
 }
+
 [Serializable]
 public class CarData : AgentData
 {
@@ -84,8 +85,8 @@ public class AgentController : MonoBehaviour
 {
     // private string url = "https://agents.us-south.cf.appdomain.cloud/";
     string serverUrl = "http://localhost:8585";
-    string getAgentsEndpoint = "/getAgents";
-    string getObstaclesEndpoint = "/getObstacles";
+    string getCarsEndpoint = "/getCar";
+    string getTrafficEndpoint = "/getTraffic_Light";
     string sendConfigEndpoint = "/init";
     string updateEndpoint = "/update";
     AgentsData agentsData;
@@ -194,7 +195,7 @@ public class AgentController : MonoBehaviour
 
     IEnumerator GetCarsData() 
     {
-        UnityWebRequest www = UnityWebRequest.Get(serverUrl + getAgentsEndpoint); //Modificar EndPoint
+        UnityWebRequest www = UnityWebRequest.Get(serverUrl + getCarsEndpoint); //Modificar EndPoint
         yield return www.SendWebRequest();
  
         if (www.result != UnityWebRequest.Result.Success)
@@ -210,8 +211,8 @@ public class AgentController : MonoBehaviour
                     if(!started)
                     {
                         prevPositions[car.id] = newAgentPosition;
-                        Random rnd = new Random();
-                        int num = rnd.Next(1, 3);
+                        int num = UnityEngine.Random.Range(1, 3);
+                        // int num = rnd.Next(1, 3);
                         if (num == 1) {
                             agents[car.id] = Instantiate(coche1Prefab, newAgentPosition, Quaternion.identity);
                         } else {
@@ -224,6 +225,10 @@ public class AgentController : MonoBehaviour
                         if(currPositions.TryGetValue(car.id, out currentPosition))
                             prevPositions[car.id] = currentPosition;
                         currPositions[car.id] = newAgentPosition;
+                        if(car.isInDestiny)
+                        {   
+                            agents[car.id].SetActive(false);
+                        }
                     }
             }
 
@@ -234,7 +239,7 @@ public class AgentController : MonoBehaviour
 
     IEnumerator GetSemaforosData() 
     {
-        UnityWebRequest www = UnityWebRequest.Get(serverUrl + getObstaclesEndpoint); //Modificar EndPoint
+        UnityWebRequest www = UnityWebRequest.Get(serverUrl + getTrafficEndpoint); //Modificar EndPoint
         yield return www.SendWebRequest();
  
         if (www.result != UnityWebRequest.Result.Success)
