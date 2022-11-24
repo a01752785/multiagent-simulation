@@ -1,4 +1,6 @@
 from mesa import Agent
+from collections import deque
+
 
 class Car(Agent):
     """
@@ -20,6 +22,32 @@ class Car(Agent):
         self.destino = destino
         self.posibleMovements = []
         self.momentsDirection = ["Left", "Up", "Right"]
+        self.mapa = self.model.mapa
+        self.route = deque()
+
+    def compute_route(self, destination):
+        visited = set()
+        visited.add(self.pos)
+        dist = {self.pos : 0}
+        parent = {}
+        queue = deque()
+        queue.append(self.pos)
+        while len(queue):
+            position = queue.popleft()
+            for next_position in self.mapa.connections[position]:
+                if next_position not in visited:
+                    visited.add(next_position)
+                    queue.append(next_position)
+                    dist[next_position] = dist[position] + 1
+                    parent[next_position] = position
+
+        current_position = destination
+        route = []
+        while current_position != self.pos:
+            route.append(current_position)
+            current_position = parent[current_position]
+        route.reverse()
+        return deque(route)
 
     def moveLeaveStart(self):
         """ 
@@ -79,8 +107,6 @@ class Car(Agent):
 
             else:
                 new_position = self.posibleMovements[1][0]
-        print(new_position)
-        print(self.destino)
         return new_position
 
     def move(self):
@@ -110,25 +136,27 @@ class Car(Agent):
                     elif isinstance(cellFront, Car):
                         new_position = self.pos
                     elif isinstance(cellFront, Road):
-                        new_position = self.moveIntelligent()
+                        new_position = self.route.popleft()
 
             elif isinstance(cell, Traffic_Light):
-                new_position = self.moveToDirection(self.direction)
-        
+                new_position = self.route.popleft()
+    
         self.model.grid.move_agent(self, new_position)
 
     def step(self):
         """ 
         Determines the new direction it will take, and then moves
         """
+        if len(self.route) == 0:
+            self.route = self.compute_route(self.destino)
         self.move()
-        
+    
 
 class Traffic_Light(Agent):
     """
     Traffic light. Where the traffic lights are in the grid.
     """
-    def __init__(self, unique_id, model, state = False, timeToChange = 10):
+    def __init__(self, unique_id, model, state = False, timeToChange = 10, direction = "Left"):
         super().__init__(unique_id, model)
         """
         Creates a new Traffic light.
@@ -140,6 +168,7 @@ class Traffic_Light(Agent):
         """
         self.state = state
         self.timeToChange = timeToChange
+        self.direction = direction
 
     def step(self):
         """ 
