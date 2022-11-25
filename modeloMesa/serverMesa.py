@@ -1,3 +1,16 @@
+#----------------------------------------------------------
+# Evidencia 2. Actividad Integradora
+# Implemenración del modelo en el navegador
+# 
+# Date: 25-Nov-2022
+# Authors:
+#           Eduardo Joel Cortez Valente A01746664
+#           Paulo Ogando Gulias A01751587
+#           David Damián Galán A01752785
+#           José Ángel García Gómez A01745865
+#----------------------------------------------------------
+
+
 from agent import *
 from model import CityModel
 from mesa.visualization.modules import CanvasGrid, BarChartModule
@@ -49,7 +62,7 @@ with open('2022_base.txt') as baseFile:
     width = len(lines[0])-1
     height = len(lines)
 
-model_params = {"N":150}
+model_params = {"N":60}
 
 print(width, height)
 grid = CanvasGrid(agent_portrayal, width, height, 500, 500)
