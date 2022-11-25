@@ -144,10 +144,15 @@ public class AgentController : MonoBehaviour
                 Vector3 interpolated = Vector3.Lerp(previousPosition, currentPosition, dt);
                 Vector3 direction = currentPosition - interpolated;
 
-                 if(semaforosVerde[agent.Key].activeInHierarchy) {
-                    semaforosVerde[agent.Key].transform.localPosition = interpolated;
-                    if(direction != Vector3.zero) semaforosVerde[agent.Key].transform.rotation = Quaternion.LookRotation(direction);
+                if(agents.ContainsKey(agent.Key) && agents[agent.Key].activeInHierarchy) {
+                    agents[agent.Key].transform.localPosition = interpolated;
+                    if(direction != Vector3.zero) agents[agent.Key].transform.rotation = Quaternion.LookRotation(direction);
                 }
+
+                // if(semaforosVerde.ContainsKey(agent.Key) && semaforosVerde[agent.Key].activeInHierarchy) {
+                //     semaforosVerde[agent.Key].transform.localPosition = interpolated;
+                //     if(direction != Vector3.zero) semaforosVerde[agent.Key].transform.rotation = Quaternion.LookRotation(direction);
+                // }
             }
 
             // float t = (timer / timeToUpdate);
@@ -173,7 +178,7 @@ public class AgentController : MonoBehaviour
     {
         WWWForm form = new WWWForm();
 
-        form.AddField("N", NCoches.ToString());
+        form.AddField("NCars", NCoches.ToString());
 
         UnityWebRequest www = UnityWebRequest.Post(serverUrl + sendConfigEndpoint, form);
         www.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -206,18 +211,19 @@ public class AgentController : MonoBehaviour
 
             foreach(CarData car in carsData.positions)
             {
-                Vector3 newAgentPosition = new Vector3(car.x, car.y, car.z);
+                Vector3 newAgentPosition = new Vector3(car.x, car.y, car.z + .4f);
 
                     if(!started)
                     {
+                        Debug.Log(car.id);
                         prevPositions[car.id] = newAgentPosition;
-                        int num = UnityEngine.Random.Range(1, 3);
-                        // int num = rnd.Next(1, 3);
-                        if (num == 1) {
-                            agents[car.id] = Instantiate(coche1Prefab, newAgentPosition, Quaternion.identity);
-                        } else {
-                            agents[car.id] = Instantiate(coche2Prefab, newAgentPosition, Quaternion.identity);
-                        }
+                            int num = UnityEngine.Random.Range(1, 3);
+                            // int num = rnd.Next(1, 3);
+                            if (num == 1) {
+                                agents[car.id] = Instantiate(coche1Prefab, newAgentPosition, Quaternion.identity);
+                            } else {
+                                agents[car.id] = Instantiate(coche2Prefab, newAgentPosition, Quaternion.identity);
+                            }
                     }
                     else
                     {
@@ -225,6 +231,8 @@ public class AgentController : MonoBehaviour
                         if(currPositions.TryGetValue(car.id, out currentPosition))
                             prevPositions[car.id] = currentPosition;
                         currPositions[car.id] = newAgentPosition;
+                        Debug.Log(prevPositions[car.id]);
+                        Debug.Log(currPositions[car.id]);
                         if(car.isInDestiny)
                         {   
                             agents[car.id].SetActive(false);
@@ -253,14 +261,17 @@ public class AgentController : MonoBehaviour
             foreach(SemaforoData semaforo in semaforosData.positions)
             {
                 if (!startedLight){
-                    agents[semaforo.id] = Instantiate(semaforoRojoPrefab, new Vector3(semaforo.x, semaforo.y, semaforo.z), Quaternion.identity);
-                    semaforosVerde[semaforo.id] = Instantiate(semaforoVerdePrefab, new Vector3(semaforo.x, semaforo.y, semaforo.z), Quaternion.identity);
+                    agents[semaforo.id] = Instantiate(semaforoRojoPrefab, new Vector3(semaforo.x, semaforo.y + .5f, semaforo.z), Quaternion.identity);
+                    semaforosVerde[semaforo.id] = Instantiate(semaforoVerdePrefab, new Vector3(semaforo.x, semaforo.y + .5f, semaforo.z), Quaternion.identity);
                     semaforosVerde[semaforo.id].SetActive(false);
                 }
                 else{
                     if (semaforo.state) {
                         semaforosVerde[semaforo.id].SetActive(true);
                         agents[semaforo.id].SetActive(false);
+                    } else {
+                        semaforosVerde[semaforo.id].SetActive(false);
+                        agents[semaforo.id].SetActive(true);
                     }
                 }
             }
