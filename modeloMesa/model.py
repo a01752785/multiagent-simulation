@@ -1,3 +1,15 @@
+#----------------------------------------------------------
+# Evidencia 2. Actividad Integradora
+# Este programa representa una ciudad donde circulan carros
+# 
+# Date: 25-Nov-2022
+# Authors:
+#           Eduardo Joel Cortez Valente A01746664
+#           Paulo Ogando Gulias A01751587
+#           David Damián Galán A01752785
+#           José Ángel García Gómez A01745865
+#----------------------------------------------------------
+
 from mesa import Model
 from mesa.time import RandomActivation
 from mesa.space import MultiGrid
@@ -7,7 +19,7 @@ import json
 
 class CityModel(Model):
     """ 
-    Creates a new model with random agents.
+    Crea el modelo de la ciudad con los agentes automovil y semaforo.
     Args:
         N: Number of agents in the simulation
     """

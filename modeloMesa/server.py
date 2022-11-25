@@ -1,10 +1,10 @@
 #----------------------------------------------------------
-# Evidencia 1. Actividad Integradora
+# Evidencia 2. Actividad Integradora
 # Python flask server to interact with Unity. Based on the 
 # code provided by Sergio Ruiz.
 # Octavio Navarro. October 2021
 # 
-# Date: 21-Nov-2022
+# Date: 25-Nov-2022
 # Authors:
 #           Eduardo Joel Cortez Valente A01746664
 #           Paulo Ogando Gulias A01751587

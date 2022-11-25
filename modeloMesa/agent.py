@@ -1,3 +1,17 @@
+#----------------------------------------------------------
+# Evidencia 2. Actividad Integradora
+# Este programa representa a los agentes Car, Trafic Light
+# y construlle los objetos Road, Obstacle y Destiny
+# 
+# Date: 25-Nov-2022
+# Authors:
+#           Eduardo Joel Cortez Valente A01746664
+#           Paulo Ogando Gulias A01751587
+#           David Damián Galán A01752785
+#           José Ángel García Gómez A01745865
+#----------------------------------------------------------
+
+
 from mesa import Agent
 
 class Car(Agent):
@@ -5,16 +19,25 @@ class Car(Agent):
     Agent that moves randomly.
     Attributes:
         unique_id: Agent's ID 
-        direction: Randomly chosen direction chosen from one of eight directions
+        direction: La dirección a la que se movera según la casilla en la que se encuentra
     """
     def __init__(self, unique_id, destino, model):
         """
-        Creates a new random agent.
+        Creates a new Car agent.
         Args:
             unique_id: The agent's ID
+            destino: El destino al cual el carro desea llegar
             model: Model reference for the agent
         """
         super().__init__(unique_id, model)
+        """
+        Creates a new Car agent.
+        Args:
+            unique_id: The agent's ID
+            isInDestiny: Indica si el Carro ha lleago o no a su destino
+            destino: El destino al cual el carro desea llegar
+            posibleMovements: Los movimientos que un vehiculo puede hacer según su posición
+        """
         self.isInDestiny = False
         self.direction = ""
         self.destino = destino
@@ -22,7 +45,7 @@ class Car(Agent):
 
     def moveLeaveStart(self):
         """ 
-        Mueve al agente al camino
+        Mueve al agente fuera del destino a una casilla de tipo camino
         """
         possible_steps = self.model.grid.get_neighborhood(
             self.pos,
@@ -36,6 +59,12 @@ class Car(Agent):
                     return(movement)
 
     def moveToDirection(self, direction, fromPositon):
+        """ 
+        Regresa la posición de enfrente según la dirección hacia la cual se esta momiendo
+        Tambien define los tres posibles movimientos (derecha, enfrente, izquierda) que puede hacer
+        el car según su dirección. Esa misma matriz indica cuales son las direcciones a las que no
+        se podría mover según determinado movimiento.
+        """
         x, y = fromPositon
         if direction == "Up":
             self.posibleMovements = [((x-1,y), "Right"),((x,y+1), "Down"),((x+1,y), "Left")]
@@ -52,6 +81,9 @@ class Car(Agent):
         return(x, y)
 
     def dosyTresEnfrente(self, direction):
+        """ 
+        A partir de su posición actual, calcula segunda y tercera posición en frente con respecto a su dirección
+        """
         x, y = self.pos
         if direction == "Up":
             dos = (x,y+2)
@@ -80,6 +112,9 @@ class Car(Agent):
         return (abs(ax - nx) + abs(ay - ny))
 
     def intercerciones(self):
+        """ 
+        Se modelan los movimientos de los agentes cuando estos se mueven entre intercecciones
+        """
         if (self.pos == (1,9) or self.pos == (1,8)) and self.destino[0] > 1 and self.destino[1] < 10:
             new_position = self.posibleMovements[0][0]
         elif (self.pos == (17,11) or self.pos == (17,12)) and self.destino != (5,15) and (self.destino[0] < 14 and self.destino[1] > 12):
@@ -95,15 +130,17 @@ class Car(Agent):
         return new_position
 
     def moveIntelligent(self):
+        """ 
+        Momiento inteligente de los agentes. A partir de su posición acutal, los movimientos que puede hacer y su destino,
+        elige cual es el movimiento que le acercará lo mas posible a su destino.
+        """
         new_position = self.intercerciones()
-        
         if new_position == self.pos:
             distancia_minima = 1000
             for pos in self.posibleMovements:
                 if pos[0][0] < self.model.width and pos[0][1] < self.model.height:
                     content = self.model.grid.get_cell_list_contents([pos[0]])
                     for cell in content:
-
                         if (isinstance(cell, Road) and ((cell.direction != self.direction and cell.direction != pos[1]) 
                         or cell.direction == self.direction)) or isinstance(cell, Destination) and pos[0] == self.destino:
                             distancia_nueva = self.calcularDistancia(self.destino, pos[0])
@@ -112,15 +149,14 @@ class Car(Agent):
                                 new_position =  pos[0]
                             elif distancia_nueva == distancia_minima:
                                 new_position = self.posibleMovements[1][0]
-
                 else:
                     new_position = self.posibleMovements[1][0]
-        print(f"Automovim Numero {self.unique_id}")
-        print(self.pos)
-        print(self.destino)
         return new_position
 
     def giroValido(self, pos_move):
+        """ 
+        Determina si puede hacer un giro con base en si es o no un camino viable
+        """
         if pos_move[0] >= 0 and pos_move[0] < self.model.width and pos_move[1] > 0 and pos_move[1] < self.model.height:
             contentCell = self.model.grid.get_cell_list_contents([pos_move])
             for item in contentCell:
@@ -135,14 +171,14 @@ class Car(Agent):
             return False
 
     def checkTrafic(self, normal_movement):
+        """ 
+        Observa si hay trafico (dos parados carros al frente). Si si, se mueve en una diagonal
+        """
         unoEnfrente = self.posibleMovements[1][0]
         mePuedoMover = self.dosyTresEnfrente(self.direction)
-
         if mePuedoMover == False:
             return normal_movement
-
         dosEnfrente = self.dosyTresEnfrente(self.direction)[0]
-
         # tresEnfrente = self.dosyTresEnfrente(self.direction)[1]
         numeroCarros = 0
         contentCell = self.model.grid.get_cell_list_contents([unoEnfrente])
@@ -160,10 +196,8 @@ class Car(Agent):
         #     if isinstance(item, Car):
         #         numeroCarros += 1
         #         break
-
         izquierda = self.posibleMovements[0][0]
         derecha = self.posibleMovements[2][0]
-
         if numeroCarros != 2:
             return normal_movement
         else:
@@ -218,10 +252,10 @@ class Car(Agent):
 
             elif isinstance(cell, Traffic_Light):
                 new_position = self.moveToDirection(self.direction, self.pos)
-        
-        # mover en trafico
-        # ve si hay tres carros enfrente de el
-        # Si si hay, se mueve a la izquierda o derecha (dependiendo de a cual pueda) y luego se mueve enfrente
+                contentCellInFront = self.model.grid.get_cell_list_contents([new_position])
+                for cellFront in contentCellInFront:
+                    if isinstance(cellFront, Car):
+                        new_position = self.pos
         
         contentNewCell = self.model.grid.get_cell_list_contents([new_position])
         for item in contentNewCell:
