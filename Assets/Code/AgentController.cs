@@ -173,7 +173,7 @@ public class AgentController : MonoBehaviour
     {
         WWWForm form = new WWWForm();
 
-        form.AddField("N", NCoches.ToString());
+        form.AddField("NCars", NCoches.ToString());
 
         UnityWebRequest www = UnityWebRequest.Post(serverUrl + sendConfigEndpoint, form);
         www.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -207,17 +207,18 @@ public class AgentController : MonoBehaviour
             foreach(CarData car in carsData.positions)
             {
                 Vector3 newAgentPosition = new Vector3(car.x, car.y, car.z);
+                Debug.Log(car.id);
 
                     if(!started)
                     {
                         prevPositions[car.id] = newAgentPosition;
-                        int num = UnityEngine.Random.Range(1, 3);
-                        // int num = rnd.Next(1, 3);
-                        if (num == 1) {
-                            agents[car.id] = Instantiate(coche1Prefab, newAgentPosition, Quaternion.identity);
-                        } else {
-                            agents[car.id] = Instantiate(coche2Prefab, newAgentPosition, Quaternion.identity);
-                        }
+                            int num = UnityEngine.Random.Range(1, 3);
+                            // int num = rnd.Next(1, 3);
+                            if (num == 1) {
+                                agents[car.id] = Instantiate(coche1Prefab, newAgentPosition, Quaternion.identity);
+                            } else {
+                                agents[car.id] = Instantiate(coche2Prefab, newAgentPosition, Quaternion.identity);
+                            }
                     }
                     else
                     {

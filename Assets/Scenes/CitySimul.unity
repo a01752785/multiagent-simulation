@@ -238,9 +238,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coche1Prefab: {fileID: 4835449459435039909, guid: cf048e08c385a0f43b042939bdbe72d1, type: 3}
   coche2Prefab: {fileID: 6888963315133959909, guid: 3b25ed1cc2310404b8437f51d0ed1abf, type: 3}
-  semaforoVerdePrefab: {fileID: 0}
-  semaforoRojoPrefab: {fileID: 0}
-  NCoches: 5
+  semaforoVerdePrefab: {fileID: 5570479594627704882, guid: ce6001d98e156564783ce82b10d58c4f, type: 3}
+  semaforoRojoPrefab: {fileID: 4328143825365276969, guid: 3c11c851eb3523b4dbc8758d7a1aacce, type: 3}
+  NCoches: 10
   timeToUpdate: 5
 --- !u!4 &101338793
 Transform:
