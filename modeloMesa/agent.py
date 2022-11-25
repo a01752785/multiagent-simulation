@@ -179,7 +179,6 @@ class Car(Agent):
         if mePuedoMover == False:
             return normal_movement
         dosEnfrente = self.dosyTresEnfrente(self.direction)[0]
-        # tresEnfrente = self.dosyTresEnfrente(self.direction)[1]
         numeroCarros = 0
         contentCell = self.model.grid.get_cell_list_contents([unoEnfrente])
         for item in contentCell:
@@ -191,11 +190,6 @@ class Car(Agent):
             if isinstance(item, Car):
                 numeroCarros += 1
                 break
-        # contentCell = self.model.grid.get_cell_list_contents([tresEnfrente])
-        # for item in contentCell:
-        #     if isinstance(item, Car):
-        #         numeroCarros += 1
-        #         break
         izquierda = self.posibleMovements[0][0]
         derecha = self.posibleMovements[2][0]
         if numeroCarros != 2:
