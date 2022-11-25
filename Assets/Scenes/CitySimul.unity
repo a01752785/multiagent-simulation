@@ -236,11 +236,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 521f9d3738ea9244cbc2325dc9f509d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coche1Prefab: {fileID: 0}
-  coche2Prefab: {fileID: 0}
+  coche1Prefab: {fileID: 4835449459435039909, guid: cf048e08c385a0f43b042939bdbe72d1, type: 3}
+  coche2Prefab: {fileID: 6888963315133959909, guid: 3b25ed1cc2310404b8437f51d0ed1abf, type: 3}
   semaforoVerdePrefab: {fileID: 0}
   semaforoRojoPrefab: {fileID: 0}
-  NCoches: 0
+  NCoches: 5
   timeToUpdate: 5
 --- !u!4 &101338793
 Transform:
@@ -286,14 +286,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217b5d647ffda1445ab4c23899b0228c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layout: {fileID: 0}
+  layout: {fileID: 4900000, guid: 27db0e55dc8e68543ae040b0b797d155, type: 3}
   roadPrefab: {fileID: 623656369241294920, guid: 2425151c9feb44b4098a55042fcadd2e, type: 3}
-  building1Prefab: {fileID: 4918315371847689363, guid: 8be3ca536fa42b5449c923485982923c, type: 3}
-  building2Prefab: {fileID: 2757889544495523874, guid: e1e8a29125e18574f8e1d442eaeac349, type: 3}
-  destiny1Prefab: {fileID: 7185175791613538913, guid: 3a54a6b006066824486598f320cd0d15, type: 3}
-  destiny2Prefab: {fileID: 3053489098351902642, guid: f068b7fd0e8b4484aa197ccdf997fd81, type: 3}
+  roadPrefab2: {fileID: 4029415115239552558, guid: 48da42095c0332f4abcc8018fb8d3143, type: 3}
+  building1Prefab: {fileID: 2757889544495523874, guid: e1e8a29125e18574f8e1d442eaeac349, type: 3}
+  building2Prefab: {fileID: 4918315371847689363, guid: 8be3ca536fa42b5449c923485982923c, type: 3}
+  building3Prefab: {fileID: 1798929248730000151, guid: edb1b55cc604e984c8715127fa050100, type: 3}
+  destiny1Prefab: {fileID: 3053489098351902642, guid: f068b7fd0e8b4484aa197ccdf997fd81, type: 3}
+  destiny2Prefab: {fileID: 2030782104346209347, guid: 28e66cf3ebbe5e543ba6fd20ac901c52, type: 3}
   semaphorePrefab: {fileID: 1624262349684808749, guid: ba49e949a53830e4b8fbaff0ec8a187f, type: 3}
-  tileSize: 0
+  grass: {fileID: 3098800445846491883, guid: 07ed8988876a17f4fa7a7e20fba19a80, type: 3}
+  tileSize: 1
 --- !u!4 &1139532537
 Transform:
   m_ObjectHideFlags: 0
