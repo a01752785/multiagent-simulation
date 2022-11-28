@@ -141,14 +141,19 @@ class Car(Agent):
                 if pos[0][0] < self.model.width and pos[0][1] < self.model.height:
                     content = self.model.grid.get_cell_list_contents([pos[0]])
                     for cell in content:
+                        if isinstance(cell, Car):
+                            new_position = self.pos
+                            continue
                         if (isinstance(cell, Road) and ((cell.direction != self.direction and cell.direction != pos[1]) 
-                        or cell.direction == self.direction)) or isinstance(cell, Destination) and pos[0] == self.destino and not isinstance(cell, Car):
+                        or cell.direction == self.direction)) or isinstance(cell, Destination) and pos[0] == self.destino:
                             distancia_nueva = self.calcularDistancia(self.destino, pos[0])
                             if distancia_nueva < distancia_minima:
                                 distancia_minima = distancia_nueva
                                 new_position =  pos[0]
+                                break
                             elif distancia_nueva == distancia_minima:
                                 new_position = self.posibleMovements[1][0]
+                                break
                 else:
                     new_position = self.posibleMovements[1][0]
 
