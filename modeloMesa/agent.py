@@ -151,7 +151,16 @@ class Car(Agent):
                                 new_position = self.posibleMovements[1][0]
                 else:
                     new_position = self.posibleMovements[1][0]
+
+        contentNewCell = self.model.grid.get_cell_list_contents([new_position])
+        for item in contentNewCell:
+            if isinstance(item, Car):
+                new_position = self.pos
+        else:
+            new_position = new_position
+        
         return new_position
+
 
     def giroValido(self, pos_move):
         """ 
