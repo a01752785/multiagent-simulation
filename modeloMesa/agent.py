@@ -142,16 +142,18 @@ class Car(Agent):
                     content = self.model.grid.get_cell_list_contents([pos[0]])
                     for cell in content:
                         if (isinstance(cell, Road) and ((cell.direction != self.direction and cell.direction != pos[1]) 
-                        or cell.direction == self.direction)) or isinstance(cell, Destination) and pos[0] == self.destino:
+                        or cell.direction == self.direction)) or (isinstance(cell, Destination) and pos[0] == self.destino):
                             distancia_nueva = self.calcularDistancia(self.destino, pos[0])
                             if distancia_nueva < distancia_minima:
                                 distancia_minima = distancia_nueva
-                                new_position =  pos[0]
+                                new_position = pos[0]
                             elif distancia_nueva == distancia_minima:
                                 new_position = self.posibleMovements[1][0]
                 else:
                     new_position = self.posibleMovements[1][0]
+
         return new_position
+
 
     def giroValido(self, pos_move):
         """ 
@@ -255,6 +257,7 @@ class Car(Agent):
         for item in contentNewCell:
             if isinstance(item, Car):
                 self.model.grid.move_agent(self, self.pos)
+                break
         else:
             self.model.grid.move_agent(self, new_position)
 
