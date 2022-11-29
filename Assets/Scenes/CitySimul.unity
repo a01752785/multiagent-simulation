@@ -242,7 +242,7 @@ MonoBehaviour:
   semaforoVerdePrefab: {fileID: 3313554319139208174, guid: 91de0824f7834bf44ace3360e2a71188, type: 3}
   semaforoRojoPrefab: {fileID: 61637115908965753, guid: 659644ccc8aa9eb40b3d8a5309459e6f, type: 3}
   NCoches: 80
-  timeToUpdate: 2
+  timeToUpdate: 0.5
 --- !u!4 &101338793
 Transform:
   m_ObjectHideFlags: 0
