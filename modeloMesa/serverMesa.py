@@ -49,8 +49,8 @@ def agent_portrayal(agent):
     if (isinstance(agent, Car)):
         portrayal["Color"] = "purple" if not agent.isInDestiny else "lightgreen"
         portrayal["Layer"] = 0
-        portrayal["w"] = 0.8
-        portrayal["h"] = 0.8
+        portrayal["w"] = 0.3
+        portrayal["h"] = 0.3
 
     return portrayal
 
@@ -62,7 +62,7 @@ with open('2022_base.txt') as baseFile:
     width = len(lines[0])-1
     height = len(lines)
 
-model_params = {"N":80}
+model_params = {"N":150}
 
 print(width, height)
 grid = CanvasGrid(agent_portrayal, width, height, 500, 500)

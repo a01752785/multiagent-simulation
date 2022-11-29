@@ -284,14 +284,97 @@ class Traffic_Light(Agent):
         """
         self.state = state
         self.timeToChange = timeToChange
+        self.direction = None
+    
 
+    def determine_direction(self):
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        map_directions = {'Left' : directions[0],
+                          'Right' : directions[1],
+                          'Down' : directions[2],
+                          'Up' : directions[3]}
+        for x, y in directions:
+            nextPos = (self.pos[0] + x, self.pos[1] + y)
+            if nextPos[0] >= self.model.grid.width or nextPos[0] < 0 or nextPos[1] >= self.model.grid.height or nextPos[1] < 0:
+                continue
+            cellContent = self.model.grid.get_cell_list_contents([nextPos])
+            direction = None
+            for item in cellContent:
+                if isinstance(item, Road):
+                    direction = item.direction
+            # Cell is a road
+            if direction is not None:
+                if self.direction_towards_semaphore(nextPos, map_directions[direction]):
+                    return map_directions[direction]
+        
+    def direction_towards_semaphore(self, nextPos, direction):
+        return self.pos == (nextPos[0] + direction[0] , nextPos[1] + direction[1])
+    
+    def num_of_cars_behind(self):
+        # Direction not initialized
+        if self.direction == None:
+            return 0
+        # Reverts direction of the semaphore
+        contrary_direction = (self.direction[0] * -1, self.direction[1] * -1)
+        count = 0
+        # Checks if there are cars behind the semaphore
+        for i in range (1, 5):
+            nextPos = (self.pos[0] + contrary_direction[0] * i,
+                       self.pos[1] + contrary_direction[1] * i)
+            if nextPos[0] >= self.model.grid.width or nextPos[0] < 0 or nextPos[1] >= self.model.grid.height or nextPos[1] < 0:
+                continue
+            content_cell = self.model.grid.get_cell_list_contents([nextPos])
+            for item in content_cell:
+                if isinstance(item, Car):
+                    count += 1
+                    break
+        return count
+        
     def step(self):
-        """ 
-        To change the state (green or red) of the traffic light in case you consider the time to change of each traffic light.
+        if self.direction is None:
+            self.direction = self.determine_direction()
+
+class Traffic_Light_Controller(Agent):
+    """
+    An agent to control an intersection.
+    """
+    def __init__(self, unique_id, model):
+        super().__init__(unique_id, model)
         """
-        # if self.model.schedule.steps % self.timeToChange == 0:
-        #     self.state = not self.state
-        pass
+        Creates a new Traffic light.
+        Args:
+            unique_id: The agent's ID
+            model: Model reference for the agent
+            state: Whether the traffic light is green or red
+            timeToChange: After how many step should the traffic light change color 
+        """
+        self.semaphore_groups = [[], []]
+    
+    def add_semaphore(self, semaphore, group):
+        # Add the reference to the semaphore
+        self.semaphore_groups[group].append(semaphore)
+    
+    def group_car_count(self, group):
+        count = 0
+        for semaphore in self.semaphore_groups[group]:
+            count += semaphore.num_of_cars_behind()
+        return count
+    
+    def change_group_state(self, group, state):
+        for semaphore in self.semaphore_groups[group]:
+            semaphore.state = state
+    
+    def step(self):
+        # Check if there are cars in the intersection
+        if self.group_car_count(0) > self.group_car_count(1):
+            self.change_group_state(0, True)
+            self.change_group_state(1, False)
+        else:
+            self.change_group_state(0, False)
+            self.change_group_state(1, True)
+    
+    
+    
 
 class Destination(Agent):
     """
