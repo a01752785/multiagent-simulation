@@ -39,6 +39,9 @@ class CityModel(Model):
 
             self.grid = MultiGrid(self.width, self.height, torus = False) 
             self.schedule = RandomActivation(self)
+            agentTlc = Traffic_Light_Controller(f"tlc_1", self)
+            self.schedule.add(agentTlc)
+
 
             for r, row in enumerate(lines):
                 for c, col in enumerate(row):
@@ -51,6 +54,11 @@ class CityModel(Model):
                         self.grid.place_agent(agent, (c, self.height - r - 1))
                         self.schedule.add(agent)
                         self.traffic_lights.append(agent)
+                        if col == "S":
+                            agentTlc.add_semaphore(agent, 0)
+                        elif col == "s":
+                            agentTlc.add_semaphore(agent, 1)
+                        
 
                     elif col == "#":
                         agent = Obstacle(f"ob_{r*self.width+c}", self)
@@ -71,8 +79,5 @@ class CityModel(Model):
 
     def step(self):
         '''Advance the model by one step.'''
-        if self.schedule.steps % 10 == 0:
-            for agent in self.traffic_lights:
-                agent.state = not agent.state
         self.schedule.step()
         
