@@ -238,6 +238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coche1Prefab: {fileID: 4835449459435039909, guid: cf048e08c385a0f43b042939bdbe72d1, type: 3}
   coche2Prefab: {fileID: 6888963315133959909, guid: 3b25ed1cc2310404b8437f51d0ed1abf, type: 3}
+  coche3Prefab: {fileID: 7033846663673497210, guid: eda4da60c21770c49843ba0be1bb2b86, type: 3}
   semaforoVerdePrefab: {fileID: 3313554319139208174, guid: 91de0824f7834bf44ace3360e2a71188, type: 3}
   semaforoRojoPrefab: {fileID: 61637115908965753, guid: 659644ccc8aa9eb40b3d8a5309459e6f, type: 3}
   NCoches: 80
@@ -292,6 +293,7 @@ MonoBehaviour:
   building1Prefab: {fileID: 2757889544495523874, guid: e1e8a29125e18574f8e1d442eaeac349, type: 3}
   building2Prefab: {fileID: 4918315371847689363, guid: 8be3ca536fa42b5449c923485982923c, type: 3}
   building3Prefab: {fileID: 1798929248730000151, guid: edb1b55cc604e984c8715127fa050100, type: 3}
+  building4Prefab: {fileID: 7235120171982644726, guid: 20f693bdbdafb8a49bf72d0783780574, type: 3}
   destiny1Prefab: {fileID: 3053489098351902642, guid: f068b7fd0e8b4484aa197ccdf997fd81, type: 3}
   destiny2Prefab: {fileID: 2030782104346209347, guid: 28e66cf3ebbe5e543ba6fd20ac901c52, type: 3}
   semaphorePrefab: {fileID: 1624262349684808749, guid: ba49e949a53830e4b8fbaff0ec8a187f, type: 3}
