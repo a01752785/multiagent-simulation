@@ -97,7 +97,7 @@ public class AgentController : MonoBehaviour
 
     bool updated = false, started = false, startedLight= false;
 
-    public GameObject coche1Prefab, coche2Prefab, semaforoVerdePrefab, semaforoRojoPrefab;
+    public GameObject coche1Prefab, coche2Prefab, coche3Prefab, semaforoVerdePrefab, semaforoRojoPrefab;
     public int NCoches;
     public float timeToUpdate = 5.0f;
     private float timer, dt;
@@ -217,10 +217,12 @@ public class AgentController : MonoBehaviour
                     {
                         Debug.Log(car.id);
                         prevPositions[car.id] = newAgentPosition;
-                            int num = UnityEngine.Random.Range(1, 3);
+                            int num = UnityEngine.Random.Range(1, 4);
                             // int num = rnd.Next(1, 3);
                             if (num == 1) {
                                 agents[car.id] = Instantiate(coche1Prefab, newAgentPosition, Quaternion.identity);
+                            } else if (num == 2) {
+                                agents[car.id] = Instantiate(coche3Prefab, newAgentPosition, Quaternion.identity);
                             } else {
                                 agents[car.id] = Instantiate(coche2Prefab, newAgentPosition, Quaternion.identity);
                             }
@@ -231,8 +233,6 @@ public class AgentController : MonoBehaviour
                         if(currPositions.TryGetValue(car.id, out currentPosition))
                             prevPositions[car.id] = currentPosition;
                         currPositions[car.id] = newAgentPosition;
-                        Debug.Log(prevPositions[car.id]);
-                        Debug.Log(currPositions[car.id]);
                         if(car.isInDestiny)
                         {   
                             agents[car.id].SetActive(false);

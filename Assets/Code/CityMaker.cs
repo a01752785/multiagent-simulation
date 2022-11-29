@@ -10,6 +10,7 @@ public class CityMaker : MonoBehaviour
     [SerializeField] GameObject building1Prefab;
     [SerializeField] GameObject building2Prefab;
     [SerializeField] GameObject building3Prefab;
+    [SerializeField] GameObject building4Prefab;
     [SerializeField] GameObject destiny1Prefab;
     [SerializeField] GameObject destiny2Prefab;
     [SerializeField] GameObject semaphorePrefab;
@@ -130,7 +131,7 @@ public class CityMaker : MonoBehaviour
             } else if (tiles[i] == '#') {
                 position = new Vector3(x * tileSize, 0, (y * tileSize) + .4f);
                 tile = Instantiate(grass, position, Quaternion.identity);
-                int num = UnityEngine.Random.Range(1, 4);
+                int num = UnityEngine.Random.Range(1, 5);
                     if (num == 1) {
                         position = new Vector3(x * tileSize, 0, (y * tileSize) + .4f);
                         tile = Instantiate(building1Prefab, position, Quaternion.identity);
@@ -139,9 +140,13 @@ public class CityMaker : MonoBehaviour
                         position = new Vector3(x * tileSize, -.1f, (y * tileSize) + .4f);
                         tile = Instantiate(building2Prefab, position, Quaternion.Euler(-90, 0, 0));
                         tile.transform.localScale = new Vector3(.075f, .06f, .075f);
+                    } else if (num == 3) {
+                        position = new Vector3(x * tileSize, -.1f, (y * tileSize) + .4f);
+                        tile = Instantiate(building3Prefab, position, Quaternion.Euler(-90, 0, 0));
+                        tile.transform.localScale = new Vector3(.075f, .06f, .075f);
                     } else {
                         position = new Vector3(x * tileSize, -.1f, (y * tileSize) + .4f);
-                        tile = Instantiate(building3Prefab, position, Quaternion.Euler(0, 0, 0));
+                        tile = Instantiate(building4Prefab, position, Quaternion.Euler(0, 0, 0));
                     }
                 tile.transform.parent = transform;
                 x += 1;
