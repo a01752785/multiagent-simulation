@@ -255,7 +255,10 @@ class Car(Agent):
         
         contentNewCell = self.model.grid.get_cell_list_contents([new_position])
         for item in contentNewCell:
-            if isinstance(item, Car):
+            if new_position != self.destino:
+                self.model.grid.move_agent(self, new_position)
+                break
+            elif isinstance(item, Car) and new_position != self.destino:
                 self.model.grid.move_agent(self, self.pos)
                 break
         else:
