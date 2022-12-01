@@ -3,14 +3,13 @@
 # Este programa representa a los agentes Car, Trafic Light
 # y construlle los objetos Road, Obstacle y Destiny
 # 
-# Date: 25-Nov-2022
+# Date: 02-Dic-2022
 # Authors:
 #           Eduardo Joel Cortez Valente A01746664
 #           Paulo Ogando Gulias A01751587
 #           David Damián Galán A01752785
 #           José Ángel García Gómez A01745865
 #----------------------------------------------------------
-
 
 from mesa import Agent
 
@@ -226,12 +225,12 @@ class Car(Agent):
         for cell in currentCell:
             if isinstance(cell, Destination) and (self.pos != self.destino):
                 new_position = self.moveLeaveStart()
+                break
 
             elif isinstance(cell, Road):
                 self.direction = cell.direction
                 new_position = self.moveToDirection(self.direction, self.pos)
 
-                # mover según lo que haya en frente
                 contentCellInFront = self.model.grid.get_cell_list_contents([new_position])
                 for cellFront in contentCellInFront:
                     if (self.pos == (7,15) or self.pos == (6,15)) and self.destino == (5,15):
@@ -288,9 +287,11 @@ class Traffic_Light(Agent):
         self.state = state
         self.timeToChange = timeToChange
         self.direction = None
-    
 
     def determine_direction(self):
+        """
+        Determine the direction of the semaphore
+        """
         directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
         map_directions = {'Left' : directions[0],
                           'Right' : directions[1],
@@ -305,22 +306,25 @@ class Traffic_Light(Agent):
             for item in cellContent:
                 if isinstance(item, Road):
                     direction = item.direction
-            # Cell is a road
             if direction is not None:
                 if self.direction_towards_semaphore(nextPos, map_directions[direction]):
                     return map_directions[direction]
         
     def direction_towards_semaphore(self, nextPos, direction):
+        """
+        Get the direction towars the semaphore
+        """
         return self.pos == (nextPos[0] + direction[0] , nextPos[1] + direction[1])
     
     def num_of_cars_behind(self):
-        # Direction not initialized
+        """
+        Checks if there are cars behind the semaphore
+        To do that, initialized direction and reverts it to look at it
+        """
         if self.direction == None:
             return 0
-        # Reverts direction of the semaphore
         contrary_direction = (self.direction[0] * -1, self.direction[1] * -1)
         count = 0
-        # Checks if there are cars behind the semaphore
         for i in range (1, 5):
             nextPos = (self.pos[0] + contrary_direction[0] * i,
                        self.pos[1] + contrary_direction[1] * i)
@@ -346,38 +350,42 @@ class Traffic_Light_Controller(Agent):
         """
         Creates a new Traffic light.
         Args:
-            unique_id: The agent's ID
-            model: Model reference for the agent
-            state: Whether the traffic light is green or red
-            timeToChange: After how many step should the traffic light change color 
+            semaphore_groups: List containing the groups of semaphores in a place
         """
         self.semaphore_groups = [[], []]
     
     def add_semaphore(self, semaphore, group):
-        # Add the reference to the semaphore
+        """
+        Add the reference to the semaphore
+        """
         self.semaphore_groups[group].append(semaphore)
     
     def group_car_count(self, group):
+        """
+        Count the amount of cars in a group
+        """
         count = 0
         for semaphore in self.semaphore_groups[group]:
             count += semaphore.num_of_cars_behind()
         return count
     
     def change_group_state(self, group, state):
+        """
+        Gruop the states of the semaphores
+        """
         for semaphore in self.semaphore_groups[group]:
             semaphore.state = state
     
     def step(self):
-        # Check if there are cars in the intersection
+        """
+        Check if there are cars in the intersection
+        """
         if self.group_car_count(0) > self.group_car_count(1):
             self.change_group_state(0, True)
             self.change_group_state(1, False)
         else:
             self.change_group_state(0, False)
-            self.change_group_state(1, True)
-    
-    
-    
+            self.change_group_state(1, True)    
 
 class Destination(Agent):
     """

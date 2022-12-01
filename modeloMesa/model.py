@@ -2,7 +2,7 @@
 # Evidencia 2. Actividad Integradora
 # Este programa representa una ciudad donde circulan carros
 # 
-# Date: 25-Nov-2022
+# Date: 02-Dic-2022
 # Authors:
 #           Eduardo Joel Cortez Valente A01746664
 #           Paulo Ogando Gulias A01751587
@@ -42,7 +42,6 @@ class CityModel(Model):
             agentTlc = Traffic_Light_Controller(f"tlc_1", self)
             self.schedule.add(agentTlc)
 
-
             for r, row in enumerate(lines):
                 for c, col in enumerate(row):
                     if col in ["v", "^", ">", "<"]:
@@ -59,7 +58,6 @@ class CityModel(Model):
                         elif col == "s":
                             agentTlc.add_semaphore(agent, 1)
                         
-
                     elif col == "#":
                         agent = Obstacle(f"ob_{r*self.width+c}", self)
                         self.grid.place_agent(agent, (c, self.height - r - 1))
@@ -75,7 +73,6 @@ class CityModel(Model):
                 self.grid.place_agent(agent, choice(self.destinos))
                 self.schedule.add(agent)
                 item += 1
-
 
     def step(self):
         '''Advance the model by one step.'''
