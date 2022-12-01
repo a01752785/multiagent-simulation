@@ -1,3 +1,15 @@
+#----------------------------------------------------------
+# Evidencia 2. Actividad Integradora
+# Este programa representa una ciudad donde circulan carros
+# 
+# Date: 02-Dic-2022
+# Authors:
+#           Eduardo Joel Cortez Valente A01746664
+#           Paulo Ogando Gulias A01751587
+#           David Damián Galán A01752785
+#           José Ángel García Gómez A01745865
+#----------------------------------------------------------
+
 from mesa import Model
 from mesa.time import RandomActivation
 from mesa.space import MultiGrid
@@ -7,7 +19,7 @@ import json
 
 class CityModel(Model):
     """ 
-    Creates a new model with random agents.
+    Crea el modelo de la ciudad con los agentes automovil y semaforo.
     Args:
         N: Number of agents in the simulation
     """
@@ -27,6 +39,8 @@ class CityModel(Model):
 
             self.grid = MultiGrid(self.width, self.height, torus = False) 
             self.schedule = RandomActivation(self)
+            agentTlc = Traffic_Light_Controller(f"tlc_1", self)
+            self.schedule.add(agentTlc)
 
             for r, row in enumerate(lines):
                 for c, col in enumerate(row):
@@ -39,7 +53,11 @@ class CityModel(Model):
                         self.grid.place_agent(agent, (c, self.height - r - 1))
                         self.schedule.add(agent)
                         self.traffic_lights.append(agent)
-
+                        if col == "S":
+                            agentTlc.add_semaphore(agent, 0)
+                        elif col == "s":
+                            agentTlc.add_semaphore(agent, 1)
+                        
                     elif col == "#":
                         agent = Obstacle(f"ob_{r*self.width+c}", self)
                         self.grid.place_agent(agent, (c, self.height - r - 1))
@@ -56,11 +74,7 @@ class CityModel(Model):
                 self.schedule.add(agent)
                 item += 1
 
-
     def step(self):
         '''Advance the model by one step.'''
-        if self.schedule.steps % 10 == 0:
-            for agent in self.traffic_lights:
-                agent.state = not agent.state
         self.schedule.step()
         

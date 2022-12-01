@@ -1,3 +1,16 @@
+#----------------------------------------------------------
+# Evidencia 2. Actividad Integradora
+# Implemenración del modelo en el navegador
+# 
+# Date: 02-Dic-2022
+# Authors:
+#           Eduardo Joel Cortez Valente A01746664
+#           Paulo Ogando Gulias A01751587
+#           David Damián Galán A01752785
+#           José Ángel García Gómez A01745865
+#----------------------------------------------------------
+
+
 from agent import *
 from model import CityModel
 from mesa.visualization.modules import CanvasGrid, BarChartModule
@@ -36,8 +49,8 @@ def agent_portrayal(agent):
     if (isinstance(agent, Car)):
         portrayal["Color"] = "purple" if not agent.isInDestiny else "lightgreen"
         portrayal["Layer"] = 0
-        portrayal["w"] = 0.8
-        portrayal["h"] = 0.8
+        portrayal["w"] = 0.3
+        portrayal["h"] = 0.3
 
     return portrayal
 
