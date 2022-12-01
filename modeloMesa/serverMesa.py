@@ -2,7 +2,7 @@
 # Evidencia 2. Actividad Integradora
 # Implemenración del modelo en el navegador
 # 
-# Date: 25-Nov-2022
+# Date: 02-Dic-2022
 # Authors:
 #           Eduardo Joel Cortez Valente A01746664
 #           Paulo Ogando Gulias A01751587
