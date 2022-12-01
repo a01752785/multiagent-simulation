@@ -42,7 +42,7 @@ public class CarData : AgentData
 [Serializable]
 public class SemaforoData : AgentData
 {
-    //Clase del Agente caja, que hereda de la clase principal y crea el booleano que indica
+    //Clase del Agente Semaforo, que hereda de la clase principal y crea el booleano que indica
     //si la caja ya fue recogida o no
     public bool state;
 
@@ -66,7 +66,7 @@ public class CarsData
 
 public class SemaforosData
 {
-    //Clase que permite guardar las posiciones de los agentes Caja, asi como tambien actualizarlas
+    //Clase que permite guardar las posiciones de los agentes Semaforo, asi como tambien actualizarlas
     public List<SemaforoData> positions;
 
     public SemaforosData() => this.positions = new List<SemaforoData>();
@@ -111,8 +111,8 @@ public class AgentController : MonoBehaviour
         prevPositions = new Dictionary<string, Vector3>();
         currPositions = new Dictionary<string, Vector3>();
 
-        semaforosVerde = new Dictionary<string, GameObject>();
-        agents = new Dictionary<string, GameObject>();
+        semaforosVerde = new Dictionary<string, GameObject>(); //Guarda los prefabs de la luz en verde
+        agents = new Dictionary<string, GameObject>(); //Guarda todos los GameObjects
 
         // floor.transform.localScale = new Vector3((float)width/10, 1, (float)height/10);
         // floor.transform.localPosition = new Vector3((float)width/2-0.5f, 0, (float)height/2-0.5f);
@@ -144,15 +144,12 @@ public class AgentController : MonoBehaviour
                 Vector3 interpolated = Vector3.Lerp(previousPosition, currentPosition, dt);
                 Vector3 direction = currentPosition - interpolated;
 
+                //Cambia las posisciones de los coches
                 if(agents.ContainsKey(agent.Key) && agents[agent.Key].activeInHierarchy) {
                     agents[agent.Key].transform.localPosition = interpolated;
                     if(direction != Vector3.zero) agents[agent.Key].transform.rotation = Quaternion.LookRotation(direction);
                 }
 
-                // if(semaforosVerde.ContainsKey(agent.Key) && semaforosVerde[agent.Key].activeInHierarchy) {
-                //     semaforosVerde[agent.Key].transform.localPosition = interpolated;
-                //     if(direction != Vector3.zero) semaforosVerde[agent.Key].transform.rotation = Quaternion.LookRotation(direction);
-                // }
             }
 
             // float t = (timer / timeToUpdate);
@@ -176,6 +173,7 @@ public class AgentController : MonoBehaviour
 
     IEnumerator SendConfiguration()
     {
+        //Crea el inicio de la simulacion
         WWWForm form = new WWWForm();
 
         form.AddField("NCars", NCoches.ToString());
@@ -200,6 +198,7 @@ public class AgentController : MonoBehaviour
 
     IEnumerator GetCarsData() 
     {
+        //Obtiene las posiciones inciales de los automoviles y luego se encarga de modificarlas
         UnityWebRequest www = UnityWebRequest.Get(serverUrl + getCarsEndpoint); //Modificar EndPoint
         yield return www.SendWebRequest();
  
@@ -247,6 +246,7 @@ public class AgentController : MonoBehaviour
 
     IEnumerator GetSemaforosData() 
     {
+        //Agrega los semaforos de la escena
         UnityWebRequest www = UnityWebRequest.Get(serverUrl + getTrafficEndpoint); //Modificar EndPoint
         yield return www.SendWebRequest();
  

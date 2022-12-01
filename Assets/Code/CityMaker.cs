@@ -27,12 +27,14 @@ public class CityMaker : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {  
+        //Guarda las posiciones de los semaforos segun a donde deben ir rotados en la escena
         semaforosArriba = new List<(int, int)> {(0, 13), (1, 13), (6, 2), (7, 2), (13, 2), (14, 2)};
         semaforosAbajo = new List<(int, int)> {(6, 16), (7, 16), (22, 7), (23, 7), (16, 22), (17, 22)};
         semaforosDerecha = new List<(int, int)> {(2, 12), (2, 11), (8, 18), (8, 17), (18, 23), (18, 24)};
         semaforosIzquierda = new List<(int, int)> {(5, 0), (5, 1), (12, 0), (12, 1), (21, 9), (21, 8)};
         
+        //Guarda las posisciones de los destinos segun a donde deben ir rotados en la escena
         destinosArriba = new List<(int, int)> {(3, 22), (10, 7)};
         destinosAbajo = new List<(int, int)> {(3, 19), (19, 2)};
         destinosDerecha = new List<(int, int)> {(5, 4), (12, 4), (21, 5), (21, 22), (12, 20), (12, 15), (5, 15)};
@@ -63,23 +65,29 @@ public class CityMaker : MonoBehaviour
 
         for (int i=0; i<tiles.Length; i++) {
             if (tiles[i] == '>' || tiles[i] == '<') {
+                //Genera los prefabs de las calles que apuntan horizontalmente
                 position = new Vector3((x * tileSize) + .4f, 0, (y * tileSize) + .4f);
                 tile = Instantiate(roadPrefab2, position, Quaternion.Euler(-90, 0, -90));
                 tile.transform.parent = transform;
                 x += 1;
             } else if (tiles[i] == 'v' || tiles[i] == '^') {
+                //Genera los prefabs de las calles que apuntan verticalmente
                 position = new Vector3(x * tileSize, 0, y * tileSize);
                 tile = Instantiate(roadPrefab, position, Quaternion.Euler(-90, 0, 0));
                 tile.transform.parent = transform;
                 x += 1;
             } else if (tiles[i] == 's') {
+                //Genera los semaforos que estan en las calles horizontales instanciando primero una
+                //calle y encima el semaforo
                 position = new Vector3(x * tileSize, 0, y * tileSize);
                 positionRoad = new Vector3((x * tileSize) + .4f, 0, (y * tileSize) + .4f);
                 tile = Instantiate(roadPrefab, positionRoad, Quaternion.Euler(-90, 0, -90));
                 tile.transform.parent = transform;
+                //Rota el semaforo a la izquierda si se ecnuentra en la lista
                 if (semaforosIzquierda.Contains((x, y))) { 
                     tile = Instantiate(semaphorePrefab, position, Quaternion.Euler(0, -90, 0));
                 }
+                //Rota el semaforo a la derecha si se ecnuentra en la lista
                 else if (semaforosDerecha.Contains((x, y))) { 
                     positionSemaf = new Vector3((x * tileSize), 0, (y * tileSize) + .8f);
                     tile = Instantiate(semaphorePrefab, positionSemaf, Quaternion.Euler(0, 90, 0));
@@ -87,13 +95,17 @@ public class CityMaker : MonoBehaviour
                 tile.transform.parent = transform;
                 x += 1;
             } else if (tiles[i] == 'S') {
+                //Genera los semaforos que estan en las calles verticales instanciando primero una
+                //calle y encima el semaforo
                 position = new Vector3(x * tileSize, 0, y * tileSize);
                 tile = Instantiate(roadPrefab, position, Quaternion.Euler(-90, 0, 0));
                 tile.transform.parent = transform;
+                //Rota el semaforo apuntando hacia arriba si esta en la lista
                 if (semaforosArriba.Contains((x, y))) {
                     positionSemaf = new Vector3((x * tileSize) - .4f, 0, (y * tileSize));
                     tile = Instantiate(semaphorePrefab, positionSemaf, Quaternion.Euler(0, 0, 0));
                 }
+                //Rota el semaforo apuntando hacia abajo si esta en la lista
                 else if (semaforosAbajo.Contains((x, y))) {
                     positionSemaf = new Vector3((x * tileSize) + .4f, 0, (y * tileSize)); 
                     tile = Instantiate(semaphorePrefab, positionSemaf, Quaternion.Euler(0, 180, 0));
@@ -101,9 +113,12 @@ public class CityMaker : MonoBehaviour
                 tile.transform.parent = transform;
                 x += 1;
             } else if (tiles[i] == 'D') {
+                //Genera los destinos y los rota si es necesario generando una instanica de pasto
+                //abajo de el
                 position = new Vector3(x * tileSize, 0, (y * tileSize) + .4f);
                 tile = Instantiate(grass, position, Quaternion.identity);
                 int num = UnityEngine.Random.Range(1, 3);
+                //Dependiendo del numero random, genera uno de los prefabs
                     if (num == 1) {
                         position = new Vector3(x * tileSize, 0, (y * tileSize) + .4f);
                         if (destinosArriba.Contains((x, y))) tile = Instantiate(destiny1Prefab, position, Quaternion.Euler(-90, 90, 0));
@@ -111,6 +126,8 @@ public class CityMaker : MonoBehaviour
                         if (destinosDerecha.Contains((x, y))) tile = Instantiate(destiny1Prefab, position, Quaternion.Euler(-90, 180, 0));
                         if (destinosIzquierda.Contains((x, y))) tile = Instantiate(destiny1Prefab, position, Quaternion.Euler(-90, 0, 0));
                     } else {
+                        //Ajusta las posiciones del McDonalds debido al modelo, para que esten centrados en la 
+                        //celda de Mesa
                         if (destinosArriba.Contains((x, y))) {
                             position = new Vector3((x * tileSize) + 0.284f, 0, (y * tileSize) + 0.548f);
                             tile = Instantiate(destiny2Prefab, position, Quaternion.Euler(0, 90, 0));
@@ -129,9 +146,13 @@ public class CityMaker : MonoBehaviour
                 tile.transform.parent = transform;
                 x += 1;
             } else if (tiles[i] == '#') {
+                //Genera los edificios
                 position = new Vector3(x * tileSize, 0, (y * tileSize) + .4f);
                 tile = Instantiate(grass, position, Quaternion.identity);
                 int num = UnityEngine.Random.Range(1, 5);
+                //Dependiendo del numero random, genera uno de los prefabs
+                //Nota: Un prefab lo dejamos inviisble porque genera mucho lag en la escena
+                //y es donde se encuentran las celdas con solo pasto
                     if (num == 1) {
                         position = new Vector3(x * tileSize, 0, (y * tileSize) + .4f);
                         tile = Instantiate(building1Prefab, position, Quaternion.identity);
